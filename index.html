@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Move two signals through a tiny neural network and watch its real activation values.">
+  <title>Inside a tiny network · Experiment 004</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="https://yahyanaveed10.github.io/yns/lab.html">YAHYA / LAB</a>
+    <a href="https://github.com/yahyanaveed10/experiment-004-neuron-activations">VIEW SOURCE ↗</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <p class="eyebrow">Experiment 004 / model internals</p>
+      <h1>Watch a neuron wake up.</h1>
+      <p class="hero-copy">Change two inputs and follow the numbers through a tiny neural network. A longer bar means a stronger activation.</p>
+    </section>
+
+    <section class="workbench" aria-labelledby="workbench-title">
+      <div class="controls">
+        <p class="eyebrow">01 / choose an input</p>
+        <h2 id="workbench-title">Move the signals.</h2>
+        <p>Try the four corners, then move the sliders between them.</p>
+        <div class="presets" id="presets">
+          <button type="button" data-a="0" data-b="0">Both low</button>
+          <button type="button" data-a="1" data-b="0">A high</button>
+          <button type="button" data-a="0" data-b="1">B high</button>
+          <button type="button" data-a="1" data-b="1">Both high</button>
+        </div>
+        <div class="slider-group">
+          <label for="input-a">Signal A <output id="value-a">1.00</output></label>
+          <input id="input-a" type="range" min="0" max="1" step="0.01" value="1">
+          <label for="input-b">Signal B <output id="value-b">0.00</output></label>
+          <input id="input-b" type="range" min="0" max="1" step="0.01" value="0">
+        </div>
+        <button class="play-button" id="play-button" type="button">Play all four cases ↗</button>
+        <p class="helper">The model computes how different A and B are. A score of 0 means they match; 1 means they are fully apart.</p>
+      </div>
+
+      <div class="trace" aria-labelledby="trace-title">
+        <div class="trace-heading">
+          <p class="eyebrow">02 / follow the calculation</p>
+          <h2 id="trace-title">Inside the network</h2>
+        </div>
+        <div class="stages">
+          <div class="stage" id="input-stage">
+            <h3>Inputs</h3>
+            <div class="unit">
+              <div class="unit-head"><span>Signal A</span><output id="trace-a">1.00</output></div>
+              <div class="meter"><div class="meter-fill" id="bar-a"></div></div>
+            </div>
+            <div class="unit">
+              <div class="unit-head"><span>Signal B</span><output id="trace-b">0.00</output></div>
+              <div class="meter"><div class="meter-fill" id="bar-b"></div></div>
+            </div>
+          </div>
+          <div class="flow-arrow" aria-hidden="true">→</div>
+          <div class="stage" id="hidden-stage">
+            <h3>Hidden units</h3>
+            <div class="unit">
+              <div class="unit-head"><span>Unit 1 · A − B</span><output id="hidden-one">1.00</output></div>
+              <div class="meter"><div class="meter-fill" id="bar-one"></div></div>
+            </div>
+            <div class="unit">
+              <div class="unit-head"><span>Unit 2 · B − A</span><output id="hidden-two">0.00</output></div>
+              <div class="meter"><div class="meter-fill" id="bar-two"></div></div>
+            </div>
+          </div>
+          <div class="flow-arrow" aria-hidden="true">→</div>
+          <div class="stage output-stage" id="output-stage">
+            <h3>Output</h3>
+            <div class="score" id="score">1.00</div>
+            <p>Difference strength</p>
+          </div>
+        </div>
+        <p class="live-explanation" id="explanation" role="status" aria-live="polite"></p>
+      </div>
+    </section>
+
+    <section class="explain" aria-labelledby="explain-title">
+      <p class="eyebrow">The whole model</p>
+      <h2 id="explain-title">Three short lines of math.</h2>
+      <div class="equations">
+        <div><span>01 / unit 1</span><code>max(0, A − B)</code><p>Active when A is bigger.</p></div>
+        <div><span>02 / unit 2</span><code>max(0, B − A)</code><p>Active when B is bigger.</p></div>
+        <div><span>03 / output</span><code>unit 1 + unit 2</code><p>Add both activation strengths.</p></div>
+      </div>
+      <p class="boundary">These weights were set by hand. This is a real calculation in a small neural network, not a view into MiniLM or another language model. In larger models, a single neuron can respond to many unrelated patterns.</p>
+      <div class="sources">
+        <a href="https://distill.pub/2019/activation-atlas/" target="_blank" rel="noopener">Activation Atlas · Distill 2019 ↗</a>
+        <a href="https://transformer-circuits.pub/2023/monosemantic-features" target="_blank" rel="noopener">Towards Monosemanticity · 2023 ↗</a>
+        <a href="https://github.com/yahyanaveed10/experiment-004-neuron-activations/blob/main/research.md" target="_blank" rel="noopener">Method and limits ↗</a>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>Yahya Naveed Saleem · Experiment 004</span><a href="https://yahyanaveed10.github.io/yns/lab.html">Back to the Lab ↗</a></footer>
+  <script type="module" src="app.mjs"></script>
+</body>
+</html>
